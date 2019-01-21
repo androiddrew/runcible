@@ -17,3 +17,4 @@ six==1.12.0               # via bcrypt
 sqlalchemy==1.2.14
 typing-extensions==3.6.6  # via molten
 typing-inspect==0.3.1     # via molten
+wsgicors==0.7.0

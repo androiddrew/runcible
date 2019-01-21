@@ -5,7 +5,7 @@ setup(
     version="0.1.0",
     author="Drew Bednar",
     author_email="drew@androiddrew.com",
-    description="A development  API to be used in vuejs courses and tutorials.",
+    description="A development API to be used in Vuejs courses and tutorials.",
     packages=find_packages(exclude=["tests"]),
     classifiers=[
         "Programming Language :: Python :: 3",
