@@ -4,6 +4,7 @@ from molten import schema, field
 from sqlalchemy import Column, String, Boolean
 
 from ...db import Base, DBMixin
+from runcible.schema import Link
 
 BCRYPT_LOG_ROUNDS = 11
 
@@ -11,6 +12,7 @@ BCRYPT_LOG_ROUNDS = 11
 @schema
 class User:
     id: int = field(response_only=True)
+    href: Link = field(response_only=True)
     email: Optional[str]
     display_name: Optional[str]
     password: str = field(request_only=True)

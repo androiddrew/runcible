@@ -7,6 +7,7 @@ from molten.contrib.sqlalchemy import SQLAlchemyMiddleware, SQLAlchemyEngineComp
 
 from .api.welcome import welcome
 from .api.todo import TodoManagerComponent, todo_routes
+from .api.user import UserManagerComponent, user_routes
 from .common import ExtJSONRenderer
 from .schema import APIResponse
 from .settings import SETTINGS
@@ -26,6 +27,7 @@ components = [
     SQLAlchemyEngineComponent(),
     SQLAlchemySessionComponent(),
     TodoManagerComponent(),
+    UserManagerComponent(),
 ]
 
 middleware = [ResponseRendererMiddleware(), SQLAlchemyMiddleware()]
@@ -36,7 +38,7 @@ routes = [
              Route("/", welcome, "GET"),
              Route("/_schema", get_schema, "GET"),
              Route("/_docs", get_docs, "GET"),
-         ] + [todo_routes]
+         ] + [todo_routes] + [user_routes]
 
 
 class ExtApp(App):
