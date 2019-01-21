@@ -1,6 +1,5 @@
-import os
 from typing import Tuple
-from molten import App, Route, ResponseRendererMiddleware
+from molten import App, Route, ResponseRendererMiddleware, Settings
 from molten.http import HTTP_404, Request
 from molten.openapi import Metadata, OpenAPIHandler, OpenAPIUIHandler
 from molten.settings import SettingsComponent
@@ -53,8 +52,16 @@ class ExtApp(App):
             ),
         )
 
+    @property
+    def settings(self):
+        def _get_settings(_settings: Settings):
+            return _settings
 
-def create_app(_components=None, _middleware=None, _routes=None, _renderers=None):
+        settings = self.injector.get_resolver().resolve(_get_settings)()
+        return settings
+
+
+def create_app(_components=None, _middleware=None, _routes=None, _renderers=None, initializers=[]):
     """
     Factory function for the creation of a `molten.App` instance
     """
@@ -64,4 +71,8 @@ def create_app(_components=None, _middleware=None, _routes=None, _renderers=None
         routes=_routes or routes,
         renderers=_renderers or renderers
     )
+
+    for i in initializers:
+        app = i(app)
+
     return app

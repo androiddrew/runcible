@@ -1,4 +1,5 @@
 import bcrypt
+from typing import Optional
 from molten import schema, field
 from sqlalchemy import Column, String, Boolean
 
@@ -10,11 +11,13 @@ BCRYPT_LOG_ROUNDS = 11
 @schema
 class User:
     id: int = field(response_only=True)
-    email: str
-    display_name: str
+    email: Optional[str]
+    display_name: Optional[str]
+    password: str = field(request_only=True)
     createdDate: str = field(response_only=True)
     modifiedDate: str = field(response_only=True)
     confirmed: bool = field(response_only=True)
+    active: bool = field(response_only=True)
 
 
 class UserModel(Base, DBMixin):

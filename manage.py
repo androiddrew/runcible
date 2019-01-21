@@ -1,9 +1,7 @@
 import click
 from molten.contrib.sqlalchemy import EngineData, Session
-from runcible.index import create_app
 from runcible.api.user.model import UserModel
-
-app = create_app()
+from runcible.app import app
 
 
 @click.group()
