@@ -1,7 +1,10 @@
 import click
 from molten.contrib.sqlalchemy import EngineData, Session
 from runcible.api.user.model import UserModel
-from runcible.app import app
+from runcible.index import create_app
+
+# Management script cannot use wrapped WSGI callable for direct app.injector access.
+app = create_app()
 
 
 @click.group()
@@ -19,6 +22,7 @@ def runserver(host, port):
     Runs a Werkzueg development server. Do no use for production.
     """
     from werkzeug.serving import run_simple
+    from runcible.app import app
 
     run_simple(
         hostname=host, port=port, application=app, use_debugger=True, use_reloader=True
