@@ -20,13 +20,12 @@ class BaseManager(metaclass=ABCMeta):
         """Converts a SQLAlchemy results proxy into a Schema instance"""
         pass
 
-    def raise_409(self, id:int):
+    def raise_409(self, id: int):
         """Raises a 409 HTTP error response in the event of Conflict"""
         raise HTTPError(
             HTTP_409,
             {
                 "status": 409,
-                "message": f"Entity {self.__class__.__name__} with id: {id} already exists"
-            }
-
+                "message": f"Entity {self.__class__.__name__} with id: {id} already exists",
+            },
         )

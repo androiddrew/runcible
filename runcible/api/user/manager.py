@@ -14,20 +14,32 @@ class UserManager(BaseManager):
     def schema_from_model(self, result: UserModel) -> User:
         _user = User(
             id=result.id,
-            href=self.app.reverse_uri("get_user_by_display_name", display_name=result.display_name),
+            href=self.app.reverse_uri(
+                "get_user_by_display_name", display_name=result.display_name
+            ),
             createdDate=result.created_date,
             modifiedDate=result.modified_date,
-
+            email=result.email,
+            display_name=result.display_name,
+            confirmed=result.confirmed,
+            active=result.active,
+            password=result.password,
         )
         return _user
 
-    def model_from_schema(self, todo: User) -> UserModel:
-        _user_model = UserModel()
+    def model_from_schema(self, user: User) -> UserModel:
+        _user_model = UserModel(
+            email=user.email, display_name=user.display_name, password=user.password
+        )
         return _user_model
 
-    def get_user_by_displayname(self, display_name) -> User:
+    def get_user_by_display_name(self, display_name) -> User:
         """Retrieves a `User` representation by display_name."""
-        result = self.session.query(UserModel).filter_by(display_name=display_name).one_or_none()
+        result = (
+            self.session.query(UserModel)
+            .filter_by(display_name=display_name)
+            .one_or_none()
+        )
         if result is None:
             raise EntityNotFound(f"User: {display_name} does not exist")
         return self.schema_from_model(result)

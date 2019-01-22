@@ -2,14 +2,9 @@ import datetime as dt
 from os import path
 from decimal import Decimal
 from typing import Any
-from molten import App, JSONRenderer, is_schema, dump_schema
-from wsgicors import CORS
-
-from .error import ConfigurationError
+from molten import JSONRenderer, is_schema, dump_schema
 
 BASE_PATH = path.normpath(path.join(path.abspath(path.dirname(__file__)), "."))
-
-CORS_SETTINGS = ["CORS_HEADERS", "CORS_METHODS", "CORS_ORIGIN", "CORS_MAXAGE"]
 
 
 def path_to(*xs):
@@ -34,25 +29,3 @@ class ExtJSONRenderer(JSONRenderer):
             return float(ob)
 
         raise TypeError(f"cannot encode values of type {type(ob)}")  # pragma: no cover
-
-
-def init_CORS(app: App) -> CORS:
-    """Initializes CORS wsgi middleware from app settings.
-
-    To be used within an application factory function.
-    """
-
-    _cors_settings = {k: v for k, v in app.settings.items() if k.startswith("CORS")}
-
-    for setting in CORS_SETTINGS:
-        if setting not in _cors_settings or _cors_settings.get(setting) is None:
-            raise ConfigurationError(f"CORS setting {setting} not configured")
-
-    extended_app = CORS(app,
-                        headers=_cors_settings.get("CORS_HEADERS"),
-                        methods=_cors_settings.get("CORS_METHODS"),
-                        origin=_cors_settings.get("CORS_ORIGIN"),
-                        maxage=_cors_settings.get("CORS_MAXAGE")
-                        )
-
-    return extended_app

@@ -11,5 +11,5 @@ def test_extended_encoder_date_parsing():
 
 def test_extended_encoder_decimal_casting():
     json_renderer = ExtJSONRenderer()
-    test_decimal = Decimal('1.0')
+    test_decimal = Decimal("1.0")
     assert 1.0 == json_renderer.default(test_decimal)
