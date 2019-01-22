@@ -19,9 +19,7 @@ def create_todo(todo: Todo, todo_manager: TodoManager) -> Todo:
     return HTTP_201, _todo, headers
 
 
-@annotate(
-    openapi_param_todo_id_description="The id of an existing Todo"
-)
+@annotate(openapi_param_todo_id_description="The id of an existing Todo")
 def delete_todo(todo_id: int, todo_manager: TodoManager) -> APIResponse:
     """Deletes a global Todo"""
     todo_manager.delete_todo(todo_id)
@@ -31,33 +29,29 @@ def delete_todo(todo_id: int, todo_manager: TodoManager) -> APIResponse:
     )
 
 
-@annotate(
-    openapi_param_todo_id_description="The id of an existing Todo"
-)
+@annotate(openapi_param_todo_id_description="The id of an existing Todo")
 def get_todo_by_id(todo_id: int, todo_manager: TodoManager) -> Todo:
     """Retrieves a Todo by id"""
     try:
         _todo = todo_manager.get_todo_by_id(todo_id)
     except EntityNotFound as err:
-        raise HTTPError(HTTP_404,
-                        APIResponse(status=404,
-                                    message=err.message)
-                        )
+        raise HTTPError(HTTP_404, APIResponse(status=404, message=err.message))
     return _todo
 
 
-@annotate(
-    openapi_param_todo_id_description="The id of an existing Todo"
-)
+@annotate(openapi_param_todo_id_description="The id of an existing Todo")
 def update_todo(todo_id: int, todo: Todo, todo_manager: TodoManager) -> Todo:
     """Updates a Todo item"""
     return todo_manager.update_todo(todo_id, todo)
 
 
-todo_routes = Include("/todos", [
-    Route("", list_todos, method="GET"),
-    Route("", create_todo, method="POST"),
-    Route("/{todo_id}", delete_todo, method="DELETE"),
-    Route("/{todo_id}", get_todo_by_id, method="GET"),
-    Route("/{todo_id}", update_todo, method="PATCH")
-])
+todo_routes = Include(
+    "/todos",
+    [
+        Route("", list_todos, method="GET"),
+        Route("", create_todo, method="POST"),
+        Route("/{todo_id}", delete_todo, method="DELETE"),
+        Route("/{todo_id}", get_todo_by_id, method="GET"),
+        Route("/{todo_id}", update_todo, method="PATCH"),
+    ],
+)

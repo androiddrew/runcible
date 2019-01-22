@@ -18,15 +18,12 @@ class TodoManager(BaseManager):
             createdDate=result.created_date,
             modifiedDate=result.modified_date,
             todo=result.todo,
-            complete=result.complete
+            complete=result.complete,
         )
         return _todo
 
     def model_from_schema(self, todo: Todo) -> TodoModel:
-        _todo_model = TodoModel(
-            todo=todo.todo,
-            complete=todo.complete
-        )
+        _todo_model = TodoModel(todo=todo.todo, complete=todo.complete)
         return _todo_model
 
     def get_todos(self) -> List[Todo]:

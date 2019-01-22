@@ -1,5 +1,5 @@
+import os
 import pytest
-
 from molten import testing
 from molten.contrib.sqlalchemy import EngineData
 
@@ -7,9 +7,16 @@ from runcible.index import create_app
 from runcible.db import Base
 
 
+@pytest.fixture(autouse=True, scope="module")
+def ensure_test_env_settings():
+    current_env_setting = os.environ.get("ENVIRONMENT")
+    os.environ["ENVIRONMENT"] = "test"
+    yield
+    os.environ["ENVIRONMENT"] = current_env_setting or ""
+
 
 # requires function scope so that database is removed on every tests
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def app():
     app = create_app()
     yield app
@@ -18,6 +25,7 @@ def app():
 @pytest.fixture(autouse=True)
 def create_db(app):
     """Creates a test database with session scope"""
+
     def _retrieve_engine(engine_data: EngineData):
         return engine_data.engine
 
@@ -34,7 +42,6 @@ def create_db(app):
 def client(app):
     """Creates a testing client"""
     return testing.TestClient(app)
-
 
 
 @pytest.fixture(scope="function")

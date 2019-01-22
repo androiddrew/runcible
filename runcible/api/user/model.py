@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, Boolean
 
 from ...db import Base, DBMixin
 from runcible.schema import Link
+from ...validation import ExtStringValidator
 
 BCRYPT_LOG_ROUNDS = 11
 
@@ -13,7 +14,11 @@ BCRYPT_LOG_ROUNDS = 11
 class User:
     id: int = field(response_only=True)
     href: Link = field(response_only=True)
-    email: Optional[str]
+    email: str = field(
+        validator=ExtStringValidator(),
+        pattern=r"(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})",
+        pattern_err_msg="Email address verification failed.",
+    )
     display_name: Optional[str]
     password: str = field(request_only=True)
     createdDate: str = field(response_only=True)
@@ -23,7 +28,7 @@ class User:
 
 
 class UserModel(Base, DBMixin):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     email = Column(String(255), unique=True, nullable=True)
     display_name = Column(String(255), unique=False, nullable=True)

@@ -16,8 +16,8 @@ def test_insert_todo(client):
     response = client.post("/todos", data=payload)
     content = response.json()
     assert response.status_code == 201
-    assert type(content['id']) == int
-    assert content['todo'] == payload['todo']
+    assert type(content["id"]) == int
+    assert content["todo"] == payload["todo"]
 
 
 def test_get_individual_todo_by_href(client):
@@ -34,7 +34,9 @@ def test_update_todo(client):
     payload = {"todo": "sample app"}
     response = client.post("/todos", json=payload)
     todo = response.json()
-    update_response = client.patch("{}".format(todo.get("href")), json={"complete": True, "todo": "sample app"})
+    update_response = client.patch(
+        "{}".format(todo.get("href")), json={"complete": True, "todo": "sample app"}
+    )
     updated_todo = update_response.json()
     assert updated_todo["complete"] == True
 
