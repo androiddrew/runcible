@@ -44,6 +44,7 @@ routes = (
         Route("/", welcome, "GET"),
         Route("/_schema", get_schema, "GET"),
         Route("/_docs", get_docs, "GET"),
+        Route("/ping", lambda : {"message": "pong"}, "GET", name="ping")
     ]
     + [todo_routes]
     + [user_routes]

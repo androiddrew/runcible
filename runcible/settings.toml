@@ -1,5 +1,5 @@
 [common]
-database_engine_dsn = "postgresql://runcible:@localhost/runcible"
+database_engine_dsn = "postgresql://runcible:@localhost/runcible_app"
 
 [dev]
 database_engine_params.echo = true

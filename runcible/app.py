@@ -1,6 +1,8 @@
+import sys
 from .index import create_app
 from molten import App
 from wsgicors import CORS
+from werkzeug.contrib.profiler import ProfilerMiddleware, MergeStream
 
 from .error import ConfigurationError
 
@@ -30,3 +32,8 @@ def wrap_CORS(app: App) -> CORS:
 
 
 app = wrap_CORS(create_app())
+
+# Uncomment to profile your code using the Werkzueg middleware.
+# f = open('/Users/Drewbednar/PycharmProjects/runcible/runcible/profiler.log', 'w')
+# stream = MergeStream(sys.stdout, f)
+# app = ProfilerMiddleware(app, stream)
