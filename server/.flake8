@@ -1,0 +1,5 @@
+[flake8]
+ignore = F401
+max-line-length = 160
+exclude = tests/*,.git,__pycache__,htmlcov,.cache,.tox,env,dist,doc,*egg,build
+max-complexity = 10

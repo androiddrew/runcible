@@ -44,10 +44,10 @@ routes = (
         Route("/", welcome, "GET"),
         Route("/_schema", get_schema, "GET"),
         Route("/_docs", get_docs, "GET"),
-        Route("/ping", lambda : {"message": "pong"}, "GET", name="ping")
+        Route("/ping", lambda: {"message": "pong"}, "GET", name="ping"),
     ]
-    + [todo_routes]
-    + [user_routes]
+    + [todo_routes]  # noqa: W503
+    + [user_routes]  # noqa: W503
 )
 
 

@@ -11,7 +11,7 @@ from .manager import UserManager
 def create_user(user: User, user_manger: UserManager) -> User:
     try:
         _user = user_manger.create_user(user)
-    except IntegrityError as err:
+    except IntegrityError as err:  # noqa: F841
         raise HTTPError(
             HTTP_409,
             APIResponse(

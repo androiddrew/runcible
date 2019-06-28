@@ -49,7 +49,7 @@ def initdb():
     """
     Initialize database.
     """
-    from server.runcible.db import Base
+    from runcible.db import Base
 
     def _init(engine_data: EngineData):
         Base.metadata.create_all(bind=engine_data.engine)
@@ -65,7 +65,7 @@ def dropdb():
     Drop all tables in database.
     """
 
-    from server.runcible.db import Base
+    from runcible.db import Base
 
     def _drop(engine_data: EngineData):
         Base.metadata.drop_all(bind=engine_data.engine)
