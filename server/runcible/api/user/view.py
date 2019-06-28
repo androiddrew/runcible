@@ -1,8 +1,8 @@
-from typing import List, Union
-from molten import Route, Include, HTTP_201, HTTP_202, HTTPError, HTTP_404, HTTP_409
+from typing import Union
+from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_409
 from sqlalchemy.exc import IntegrityError
 
-from runcible.schema import APIResponse
+from runcible import APIResponse
 from runcible.error import EntityNotFound
 from .model import User
 from .manager import UserManager

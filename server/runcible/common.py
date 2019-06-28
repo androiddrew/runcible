@@ -4,7 +4,7 @@ from decimal import Decimal
 from typing import Any
 from molten import JSONRenderer, is_schema, dump_schema
 
-BASE_PATH = path.normpath(path.join(path.abspath(path.dirname(__file__)), "."))
+BASE_PATH = path.normpath(path.join(path.abspath(path.dirname(__file__)), ""))
 
 
 def path_to(*xs):

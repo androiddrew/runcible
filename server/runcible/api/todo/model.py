@@ -2,7 +2,7 @@ from typing import Optional
 from molten import schema, field
 from sqlalchemy import Column, Text, Boolean
 from runcible.db import Base, DBMixin
-from runcible.schema import Link
+from runcible import Link
 
 
 @schema
