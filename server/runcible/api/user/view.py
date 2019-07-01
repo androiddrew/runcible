@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+from datetime import timedelta
 from typing import Union
 from molten import (
     Route,
@@ -46,7 +48,18 @@ def get_auth_token(
             HTTP_401,
             APIResponse(status=401, message="Password provided does not match."),
         )
-    token_payload = {"sub": user.id, "email": user.email, "is_admin": user.admin}
+
+    iat = dt.utcnow()
+    exp = iat + timedelta(seconds=30)
+
+    token_payload = {
+        "iss": "runcible.io",
+        "sub": user.id,
+        "email": user.email,
+        "is_admin": user.admin,
+        "iat": iat.timestamp(),
+        "exp": exp.timestamp(),
+    }
     token = jwt.encode(token_payload)
     return Token(status=200, message="Successfully logged in.", auth_token=token)
 
