@@ -12,7 +12,7 @@ from molten.contrib.sqlalchemy import (
 from molten_jwt import JWT, JWTComponent, JWTIdentityComponent
 from .api.welcome import welcome
 from .api.todo import TodoManagerComponent, todo_routes
-from .api.user import UserManagerComponent, user_routes, auth_routes
+from .api.user import UserManagerComponent, auth_routes
 from .common import ExtJSONRenderer
 from .schema import APIResponse
 from .settings import SETTINGS
@@ -49,7 +49,6 @@ routes = (
         Route("/ping", lambda: {"message": "pong"}, "GET", name="ping"),
     ]
     + [todo_routes]  # noqa: W503
-    + [user_routes]  # noqa: W503
     + [auth_routes]  # noqa: W503
 )
 

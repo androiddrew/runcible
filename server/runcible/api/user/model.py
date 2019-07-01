@@ -15,7 +15,6 @@ BCRYPT_LOG_ROUNDS = 11
 @schema
 class User:
     id: int = field(response_only=True)
-    href: Link = field(response_only=True)
     email: str = field(
         validator=ExtStringValidator(),
         pattern=r"(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})",

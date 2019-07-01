@@ -14,9 +14,6 @@ class UserManager(BaseManager):
     def schema_from_model(self, result: UserModel) -> User:
         _user = User(
             id=result.id,
-            href=self.app.reverse_uri(
-                "get_user_by_display_name", display_name=result.display_name
-            ),
             createdDate=result.created_date,
             modifiedDate=result.modified_date,
             email=result.email,
@@ -46,11 +43,7 @@ class UserManager(BaseManager):
 
     def get_user_by_email(self, email) -> User:
         """Retrieves a `User` representation by display_name."""
-        result = (
-            self.session.query(UserModel)
-            .filter_by(email=email)
-            .one_or_none()
-        )
+        result = self.session.query(UserModel).filter_by(email=email).one_or_none()
         if result is None:
             raise EntityNotFound(f"User: {email} does not exist")
         return self.schema_from_model(result)

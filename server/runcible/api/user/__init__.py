@@ -1,2 +1,2 @@
-from .view import user_routes, auth_routes
+from .view import auth_routes
 from .manager import UserManagerComponent
