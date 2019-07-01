@@ -4,7 +4,7 @@ from molten import schema, field
 from sqlalchemy import Column, String, Boolean
 
 from ...db import Base, DBMixin
-from runcible.schema import Link
+from runcible import Link
 from ...validation import ExtStringValidator
 
 BCRYPT_LOG_ROUNDS = 11

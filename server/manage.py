@@ -34,7 +34,6 @@ def shell():
     """
     Enters an interactive shell with an app instance and dependency resolver.
     """
-    import rlcompleter
     import readline
     from code import InteractiveConsole
 

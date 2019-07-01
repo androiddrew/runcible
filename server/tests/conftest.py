@@ -1,18 +1,14 @@
 import os
+import sys
 import pytest
 from molten import testing
 from molten.contrib.sqlalchemy import EngineData
-
 from runcible.index import create_app
 from runcible.db import Base
 
-
-@pytest.fixture(autouse=True, scope="module")
-def ensure_test_env_settings():
-    current_env_setting = os.environ.get("ENVIRONMENT")
-    os.environ["ENVIRONMENT"] = "test"
-    yield
-    os.environ["ENVIRONMENT"] = current_env_setting or ""
+# Bail if no running against test DB
+if os.environ["ENVIRONMENT"] != "test":
+    sys.exit(1)
 
 
 # requires function scope so that database is removed on every tests

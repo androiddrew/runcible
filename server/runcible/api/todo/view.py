@@ -1,7 +1,7 @@
 from typing import List
 from molten import Route, Include, HTTP_201, HTTP_202, HTTPError, HTTP_404, annotate
 
-from runcible.schema import APIResponse
+from runcible import APIResponse
 from runcible.error import EntityNotFound
 from .model import Todo
 from .manager import TodoManager

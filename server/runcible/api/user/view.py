@@ -1,8 +1,8 @@
-from typing import List, Union
-from molten import Route, Include, HTTP_201, HTTP_202, HTTPError, HTTP_404, HTTP_409
+from typing import Union
+from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_409
 from sqlalchemy.exc import IntegrityError
 
-from runcible.schema import APIResponse
+from runcible import APIResponse
 from runcible.error import EntityNotFound
 from .model import User
 from .manager import UserManager
@@ -11,7 +11,7 @@ from .manager import UserManager
 def create_user(user: User, user_manger: UserManager) -> User:
     try:
         _user = user_manger.create_user(user)
-    except IntegrityError as err:
+    except IntegrityError as err:  # noqa: F841
         raise HTTPError(
             HTTP_409,
             APIResponse(

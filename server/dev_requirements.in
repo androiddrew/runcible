@@ -1,7 +1,7 @@
 black
 bumpversion
 flake8
-pip-tools
+pip-tools>=3.8.0
 pytest
 pytest-cov
 werkzeug
