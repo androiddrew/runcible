@@ -116,3 +116,20 @@ def test_user_login(client):
     assert content["auth_token"]
     assert content["status"] == 200
     assert content["message"] == "Successfully logged in."
+
+
+def test_user_profile_from_jwt(client):
+    user_payload = {
+        "email": "test@runcible.io",
+        "display_name": "test_user",
+        "password": "password",
+    }
+    client.post("/auth/register", json=user_payload)
+    login_response = client.post("/auth/login", json={"email": "test@runcible.io", "password": "password"})
+    token = login_response.json().get('auth_token')
+    profile_response = client.get("/auth/profile", headers={"Authorization": f"Bearer {token}"})
+    assert profile_response.status_code == 200
+    profile_content = profile_response.json()
+    assert profile_content["display_name"] == "test_user"
+    assert profile_content["email"] == "test@runcible.io"
+    assert profile_content["confirmed"] == False

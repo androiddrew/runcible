@@ -44,7 +44,19 @@ class UserManager(BaseManager):
             raise EntityNotFound(f"User: {display_name} does not exist")
         return self.schema_from_model(result)
 
+    def get_user_by_email(self, email) -> User:
+        """Retrieves a `User` representation by display_name."""
+        result = (
+            self.session.query(UserModel)
+            .filter_by(email=email)
+            .one_or_none()
+        )
+        if result is None:
+            raise EntityNotFound(f"User: {email} does not exist")
+        return self.schema_from_model(result)
+
     def get_usermodel_by_email(self, email: str) -> UserModel:
+        """Retrieve's a single `UserModel` from the database by email."""
         result = self.session.query(UserModel).filter_by(email=email).one_or_none()
         if result is None:
             raise EntityNotFound(f"User: {email} does not exist")

@@ -1,7 +1,7 @@
 from typing import Union
-from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_401, HTTP_409
+from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_401, HTTP_403, HTTP_409
 from sqlalchemy.exc import IntegrityError
-from molten_jwt import JWT
+from molten_jwt import JWT, JWTIdentity
 
 from runcible import APIResponse
 from runcible.error import EntityNotFound
@@ -25,7 +25,7 @@ def create_user(user: User, user_manger: UserManager) -> User:
 
 
 def get_user_by_display_name(
-    display_name: str, user_manager: UserManager
+        display_name: str, user_manager: UserManager
 ) -> Union[User, APIResponse]:
     try:
         user = user_manager.get_user_by_display_name(display_name)
@@ -35,7 +35,7 @@ def get_user_by_display_name(
 
 
 def get_auth_token(
-    login: Login, user_manger: UserManager, jwt: JWT
+        login: Login, user_manger: UserManager, jwt: JWT
 ) -> Union[Token, APIResponse]:
     """Returns an authorization token on successful login."""
     try:
@@ -47,9 +47,21 @@ def get_auth_token(
             HTTP_401,
             APIResponse(status=401, message="Password provided does not match."),
         )
-    token_payload = {"sub": user.id, "name": user.email, "is_admin": user.admin}
+    token_payload = {"sub": user.id, "email": user.email, "is_admin": user.admin}
     token = jwt.encode(token_payload)
     return Token(status=200, message="Successfully logged in.", auth_token=token)
+
+
+def get_user_profile(jwt_user: JWTIdentity, user_manager: UserManager) -> Union[User, APIResponse]:
+    """Returns an authenticated user's profile information."""
+    if jwt_user is None:
+        raise HTTPError(HTTP_403, "Forbidden")
+    try:
+        user = user_manager.get_user_by_email(jwt_user.email)
+    except EntityNotFound as err:
+        print(err)
+        raise HTTPError(HTTP_404, APIResponse(status=404, message=err.message))
+    return user
 
 
 user_routes = Include(
@@ -60,11 +72,11 @@ user_routes = Include(
     ],
 )
 
-
 auth_routes = Include(
     "/auth",
     [
         Route("/register", create_user, method="POST"),
         Route("/login", get_auth_token, method="POST"),
+        Route("/profile", get_user_profile, method="GET"),
     ],
 )
