@@ -4,12 +4,14 @@ from molten import schema, field
 from sqlalchemy import Column, String, Boolean
 
 from ...db import Base, DBMixin
-from runcible import Link
+from runcible import Link, APIResponse
 from ...validation import ExtStringValidator
 
 BCRYPT_LOG_ROUNDS = 11
 
 
+# TODO add a gravatar user icon field
+# TODO consider adding last_ip and last_login fields
 @schema
 class User:
     id: int = field(response_only=True)
@@ -25,6 +27,23 @@ class User:
     modifiedDate: str = field(response_only=True)
     confirmed: bool = field(response_only=True)
     active: bool = field(response_only=True)
+
+
+@schema
+class Login:
+    email: str = field(
+        validator=ExtStringValidator(),
+        pattern=r"(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})",
+        pattern_err_msg="Email address verification failed.",
+        request_only=True,
+    )
+    password: str = field(request_only=True)
+
+
+@schema
+class Token(APIResponse):
+    auth_token: str = field(description="A JSON Web Token used for authentication.")
+    token_type: str = field(default="Bearer")
 
 
 class UserModel(Base, DBMixin):

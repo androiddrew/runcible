@@ -1,10 +1,11 @@
 from typing import Union
-from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_409
+from molten import Route, Include, HTTP_201, HTTPError, HTTP_404, HTTP_401, HTTP_409
 from sqlalchemy.exc import IntegrityError
+from molten_jwt import JWT
 
 from runcible import APIResponse
 from runcible.error import EntityNotFound
-from .model import User
+from .model import User, Login, Token
 from .manager import UserManager
 
 
@@ -33,10 +34,37 @@ def get_user_by_display_name(
     return user
 
 
+def get_auth_token(
+    login: Login, user_manger: UserManager, jwt: JWT
+) -> Union[Token, APIResponse]:
+    """Returns an authorization token on successful login."""
+    try:
+        user = user_manger.get_usermodel_by_email(login.email)
+    except EntityNotFound as err:
+        raise HTTPError(HTTP_404, APIResponse(status=404, message=err.message))
+    if not user.check_password(login.password):
+        raise HTTPError(
+            HTTP_401,
+            APIResponse(status=401, message="Password provided does not match."),
+        )
+    token_payload = {"sub": user.id, "name": user.email, "is_admin": user.admin}
+    token = jwt.encode(token_payload)
+    return Token(status=200, message="Successfully logged in.", auth_token=token)
+
+
 user_routes = Include(
     "/users",
     [
-        Route("", create_user, method="POST"),
+        Route("", create_user, method="POST", name="legacy_user_create"),
         Route("/{display_name}", get_user_by_display_name, method="GET"),
+    ],
+)
+
+
+auth_routes = Include(
+    "/auth",
+    [
+        Route("/register", create_user, method="POST"),
+        Route("/login", get_auth_token, method="POST"),
     ],
 )

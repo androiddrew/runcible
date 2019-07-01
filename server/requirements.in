@@ -4,3 +4,4 @@ molten
 sqlalchemy>=1.3.0
 psycopg2-binary
 wsgicors
+molten-jwt

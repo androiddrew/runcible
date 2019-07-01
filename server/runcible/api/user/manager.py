@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from runcible.manager import BaseManager
 from runcible.error import EntityNotFound
-from .model import User, UserModel
+from .model import User, Login, UserModel
 
 
 class UserManager(BaseManager):
@@ -43,6 +43,12 @@ class UserManager(BaseManager):
         if result is None:
             raise EntityNotFound(f"User: {display_name} does not exist")
         return self.schema_from_model(result)
+
+    def get_usermodel_by_email(self, email: str) -> UserModel:
+        result = self.session.query(UserModel).filter_by(email=email).one_or_none()
+        if result is None:
+            raise EntityNotFound(f"User: {email} does not exist")
+        return result
 
     def create_user(self, user: User) -> User:
         """Creates a new `User` resource and returns its representation"""

@@ -9,10 +9,10 @@ from molten.contrib.sqlalchemy import (
     SQLAlchemyEngineComponent,
     SQLAlchemySessionComponent,
 )
-
+from molten_jwt import JWT, JWTComponent, JWTIdentityComponent
 from .api.welcome import welcome
 from .api.todo import TodoManagerComponent, todo_routes
-from .api.user import UserManagerComponent, user_routes
+from .api.user import UserManagerComponent, user_routes, auth_routes
 from .common import ExtJSONRenderer
 from .schema import APIResponse
 from .settings import SETTINGS
@@ -33,6 +33,8 @@ components = [
     SQLAlchemySessionComponent(),
     TodoManagerComponent(),
     UserManagerComponent(),
+    JWTComponent(),
+    JWTIdentityComponent(),
 ]
 
 middleware = [ResponseRendererMiddleware(), SQLAlchemyMiddleware()]
@@ -48,6 +50,7 @@ routes = (
     ]
     + [todo_routes]  # noqa: W503
     + [user_routes]  # noqa: W503
+    + [auth_routes]  # noqa: W503
 )
 
 
